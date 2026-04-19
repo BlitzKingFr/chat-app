@@ -8,7 +8,66 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-    const httpServer = createServer((req,res) => {
-        
+    const httpServer = createServer((req, res) => {
+        const parsedUrl = parse(req.url, true);
+
+        //socket io
+        if (parsedUrl.pathname && parsedUrl.pathname.startsWith('/socket.io')) {
+            return;
+        }
+        handle(req, res, parsedUrl);
     })
+
+    const io = new Server(httpServer, {
+        cors: {
+            origin: '*',
+            transport: ['websocket', 'polling']
+        }
+    });
+
+    io.on("connection", (socket) => {
+        console.log("a user connected, ID:", socket.id);
+
+        //join a chatroom
+        socket.on("join_room", (room) => {
+            socket.join(room);
+            socket.data.username = username;
+            socket.data.room = room;
+
+            //display newly joined user to other users in the room
+            socket.to(room).emit("user_joined", {
+                username: socket.data.username,
+                message: `${socket.data.username} has joined the room.`
+            });
+            //current users in the room
+            const users = [...io.sockets.adapter.rooms.get(room) ?? []]
+                .map(id => io.sockets.sockets.get(id).data.username)
+                .filter(Boolean);
+            io.to(room).emit("room_users", users);
+
+            socket.on("send_message", (message) => {
+                io.to(room).emit("receive_message", {
+                    username: socket.data.username,
+                    message,
+                    time: new Date().toISOString()
+                });
+            });
+
+            //disconnect user
+            socket.on("disconnect", () => {
+                const {username, room} = socket.data;
+                if(room){
+                    socket.to(room).emit("user_left", {
+                        username,
+                        message: `${username} has left the room.`
+                    });
+                }
+            });
+        });
+    });
+
+    httpServer.listen(3000, () => {
+        console.log('> Server is running on http://localhost:3000');
+    });
 });
+
