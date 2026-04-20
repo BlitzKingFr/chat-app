@@ -19,21 +19,18 @@ const ChatWindow = ({ messages, currentUser }: ChatWindowProps) => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-  
+
   return (
-    <div style={{ height: "400px", overflowY: "auto" }}>
+    <div className="h-100 overflow-y-auto">
       {messages.map((msg, i) => (
-        <div key={i} style={{ textAlign: msg.sender === currentUser ? "right" : "left", marginBottom: 8 }}>
-          <span style={{ fontSize: 11, color:'#888', display: 'block' }}>{msg.username}</span>
-          <div style={{
-            display: "inline-block",
-            padding: "8px 12px",
-            borderRadius: 12,
-            backgroundColor: msg.sender === currentUser ? "#DCF8C6" : "#FFF",
-            maxWidth: "70%",
-            wordBreak: "break-word",
-            border: msg.sender === currentUser ? "none" : "1px solid #eee"
-          }}>
+        <div key={i} className={`mb-2 ${msg.sender === currentUser ? "text-right" : "text-left"}`}>
+          <span className="text-[11px] text-[#888] block">{msg.username}</span>
+          <div className={`
+              inline-block px-3 py-2 rounded-xl max-w-[70%] wrap-break-word
+              ${msg.sender === currentUser
+              ? "bg-[#DCF8C6] border-none"
+              : "bg-white border border-[#eee]"}`
+          }>
             {msg.message}
           </div>
         </div>
