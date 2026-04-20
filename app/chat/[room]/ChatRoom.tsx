@@ -30,22 +30,24 @@ const ChatRoom = ({ room }: ChatRoomProps) => {
   const { sendMessage } = useSocket(room, username, onMessage, setUsers);
 
   return (
-    <div className="flex h-screen bg-gray-500">
-      <aside className="w-64 border-r border-[#eee] p-4">
-        <h3 className="font-bold mb-4">Online</h3>
+    <div className="flex h-screen bg-slate-100 text-slate-900">
+      <aside className="w-72 border-r border-slate-200 bg-white/80 p-5 backdrop-blur">
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Online
+        </h3>
         <div className="space-y-2">
           {users.map(u => (
-            <div key={u} className="text-sm flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
+            <div key={u} className="flex items-center gap-2 rounded-md px-2 py-1 text-sm text-slate-700">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
               {u}
             </div>
           ))}
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col">
-        <div className="p-4 border-b font-medium text-gray-700">
-          Room: {room}
+      <main className="flex flex-1 flex-col bg-slate-50">
+        <div className="border-b border-slate-200 bg-white px-6 py-4 text-sm font-medium text-slate-700 shadow-sm">
+          Room: <span className="font-semibold text-slate-900">{room}</span>
         </div>
 
         <ChatWindow messages={messages} currentUser={username} />

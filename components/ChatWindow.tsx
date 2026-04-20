@@ -21,15 +21,15 @@ const ChatWindow = ({ messages, currentUser }: ChatWindowProps) => {
   }, [messages]);
 
   return (
-    <div className="h-100 overflow-y-auto">
+    <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
       {messages.map((msg, i) => (
-        <div key={i} className={`mb-2 ${msg.sender === currentUser ? "text-right" : "text-left"}`}>
-          <span className="text-[11px] text-[#888] block">{msg.username}</span>
+        <div key={i} className={`${msg.sender === currentUser ? "text-right" : "text-left"}`}>
+          <span className="mb-1 block text-[11px] font-medium text-slate-500">{msg.username}</span>
           <div className={`
-              inline-block px-3 py-2 rounded-xl max-w-[70%] wrap-break-word
+              inline-block max-w-[78%] rounded-2xl px-4 py-2 text-sm leading-relaxed break-words shadow-sm
               ${msg.sender === currentUser
-              ? "bg-[#DCF8C6] border-none"
-              : "bg-white border border-[#eee]"}`
+              ? "border border-emerald-200 bg-emerald-100 text-emerald-950"
+              : "border border-slate-200 bg-white text-slate-800"}`
           }>
             {msg.message}
           </div>
