@@ -1,38 +1,39 @@
 import { useEffect, useRef } from "react";
-import {getSocket} from "../socket";
-import { use } from "react";
+import {getSocket} from "../lib/socket";
 
 export default function useSocket(room, username, onMessage, onRoomUsers) {
   const socketRef = useRef(null);
 
   useEffect(()=>{
+    if (!room || !username) return;
+
     const socket = getSocket();
     socketRef.current = socket;
 
     socket.connect();
-    socket.emit("join room", {room, username});
+    socket.emit("join_room", {room, username});
 
-    socket.on("receive message", onMessage);
-    socket.on("room-users", onRoomUsers);
-    socket.on("user joined", ({username : u}) => {
-        onMessage({username: "System", text: `${u} has joined the room`});
+    socket.on("receive_message", onMessage);
+    socket.on("room_users", onRoomUsers);
+    socket.on("user_joined", ({username : u, message}) => {
+        onMessage({sender: "System", username: "System", message: message || `${u} has joined the room`});
     });
-    socket.on("user left", ({username: u}) =>{
-        onMessage({username: "System", text: `${u} has left the room`});
+    socket.on("user_left", ({username: u, message}) =>{
+        onMessage({sender: "System", username: "System", message: message || `${u} has left the room`});
     });
 
     return () => {
-        socket.off("receive message", onMessage);
-        socket.off("room-users", onRoomUsers);
-        socket.off("user joined");
-        socket.off("user left");
+        socket.off("receive_message", onMessage);
+        socket.off("room_users", onRoomUsers);
+        socket.off("user_joined");
+        socket.off("user_left");
         socket.disconnect();
     }
 
-  },[room,username])
+  },[room,username,onMessage,onRoomUsers])
 
   const sendMessage = (message) => {
-    socketRef.current?.emit("send message", {room, username, text: message});
+    socketRef.current?.emit("send_message", message);
   }
 
   return {sendMessage};

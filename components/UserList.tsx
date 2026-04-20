@@ -7,7 +7,7 @@ interface UserListProps {
 
 export default function UserList({ users, currentUser }: UserListProps) {
   return (
-    <aside className="w-50 border-r border-[#eee] p-4 h-full">
+    <aside className="w-50 border-r border-[#c41e1e] p-4 h-full">
       {/* Header section */}
       <p className="text-[11px] font-semibold uppercase text-[#888] mb-4">
         Online — {users.length}

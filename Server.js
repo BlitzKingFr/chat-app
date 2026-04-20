@@ -29,7 +29,9 @@ app.prepare().then(() => {
         console.log("a user connected, ID:", socket.id);
 
         //join a chatroom
-        socket.on("join_room", (room) => {
+        socket.on("join_room", ({ room, username }) => {
+            if (!room || !username) return;
+
             socket.join(room);
             socket.data.username = username;
             socket.data.room = room;
@@ -44,25 +46,34 @@ app.prepare().then(() => {
                 .map(id => io.sockets.sockets.get(id).data.username)
                 .filter(Boolean);
             io.to(room).emit("room_users", users);
+        });
 
-            socket.on("send_message", (message) => {
-                io.to(room).emit("receive_message", {
-                    username: socket.data.username,
-                    message,
-                    time: new Date().toISOString()
+        socket.on("send_message", (message) => {
+            const room = socket.data.room;
+            if (!room || !message) return;
+
+            io.to(room).emit("receive_message", {
+                sender: socket.data.username,
+                username: socket.data.username,
+                message,
+                time: new Date().toISOString()
+            });
+        });
+
+        //disconnect user
+        socket.on("disconnect", () => {
+            const {username, room} = socket.data;
+            if(room){
+                socket.to(room).emit("user_left", {
+                    username,
+                    message: `${username} has left the room.`
                 });
-            });
 
-            //disconnect user
-            socket.on("disconnect", () => {
-                const {username, room} = socket.data;
-                if(room){
-                    socket.to(room).emit("user_left", {
-                        username,
-                        message: `${username} has left the room.`
-                    });
-                }
-            });
+                const users = [...(io.sockets.adapter.rooms.get(room) ?? [])]
+                    .map(id => io.sockets.sockets.get(id)?.data?.username)
+                    .filter(Boolean);
+                io.to(room).emit("room_users", users);
+            }
         });
     });
 

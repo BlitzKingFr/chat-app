@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, KeyboardEvent } from 'react';
+import { useState } from 'react';
 
 interface MessageInputProps {
   onSend: (text: string) => void;
