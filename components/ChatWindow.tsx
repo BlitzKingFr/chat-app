@@ -26,7 +26,7 @@ const ChatWindow = ({ messages, currentUser }: ChatWindowProps) => {
         <div key={i} className={`${msg.sender === currentUser ? "text-right" : "text-left"}`}>
           <span className="mb-1 block text-[11px] font-medium text-slate-500">{msg.username}</span>
           <div className={`
-              inline-block max-w-[78%] rounded-2xl px-4 py-2 text-sm leading-relaxed break-words shadow-sm
+              inline-block max-w-[78%] rounded-2xl px-4 py-2 text-sm leading-relaxed wrap-break-word shadow-sm
               ${msg.sender === currentUser
               ? "border border-emerald-200 bg-emerald-100 text-emerald-950"
               : "border border-slate-200 bg-white text-slate-800"}`
