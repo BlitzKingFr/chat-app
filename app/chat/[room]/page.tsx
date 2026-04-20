@@ -1,9 +1,16 @@
-import React from 'react'
+import ChatRoom from "./ChatRoom";
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
+interface PageProps {
+  params: Promise<{
+    room: string;
+  }>;
 }
 
-export default page
+const Page = async ({ params }: PageProps) => {
+  const { room } = await params;
+  return (
+    <ChatRoom room={room} />
+  );
+};
+
+export default Page;
