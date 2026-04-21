@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💬 My Chat App
 
-## Getting Started
+A real-time chat application built with **Next.js and Socket.IO**, allowing users to join chat rooms and communicate instantly.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+* 💬 Real-time messaging with WebSockets
+* 🧑 Join chat rooms using a username
+* 👥 Live user updates in each room
+* ⚡ Fast and responsive UI with Next.js App Router
+* 🔌 Custom `useSocket` hook for clean socket management
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+
+* Next.js (App Router)
+* React
+* JavaScript
+
+---
+
+## 📂 Project Structure
+
+```bash
+my-chat-app/
+├── server.js                 # Socket.IO + Express server
+├── package.json
+├── next.config.js
+│
+├── lib/
+│   └── socket.js             # Socket instance setup
+│
+├── hooks/
+│   └── useSocket.js          # Custom hook for socket handling
+│
+└── app/
+    ├── layout.js             # Root layout
+    ├── page.js               # Home page (join room)
+    │
+    └── chat/
+        └── [room]/
+            ├── page.js       # Dynamic room route
+            └── ChatRoom.jsx  # Chat UI component
+```
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/my-chat-app.git
+cd my-chat-app
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+---
+
+## ▶️ Running the App
+
+### Start the server
+
+```bash
+node server.js
+```
+
+### Start Next.js app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App will run on:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* Frontend: `http://localhost:3000`
+* Backend: `http://localhost:5000` (or your configured port)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔌 Socket Workflow
 
-To learn more about Next.js, take a look at the following resources:
+1. User joins a room → `join-room`
+2. Server tracks users per room
+3. Messages are sent → `send-message`
+4. All users receive → `receive-message`
+5. Active users update → `room-users`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧠 How It Works
 
-## Deploy on Vercel
+* `socket.js` → creates and exports a socket connection
+* `useSocket.js` → handles connection, events, and cleanup
+* `[room]/page.js` → dynamic routing for chat rooms
+* `ChatRoom.jsx` → UI + message handling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🌟 Future Improvements
+
+* 🔐 Authentication (NextAuth / JWT)
+* 💾 Store messages (MongoDB)
+* 📸 Image/file sharing
+* 🟢 Online/offline status
+* ✉️ Private messaging
+
+---
+
+
+
+## 📄 License
+
+MIT License
+
+---
+
+## 👨‍💻 Author
+
+Jevis Kafle
+GitHub: https://github.com/BlitzKingFr
+
+---
